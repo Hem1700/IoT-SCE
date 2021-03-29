@@ -353,7 +353,8 @@ class _BluetoothAppState extends State<BluetoothApp> {
                                 color: Colors.blue,
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Center(child: Text('Get Device Temperature')),
+                                  child: Center(
+                                      child: Text('Get Device Temperature')),
                                 ),
                               ),
                             ),
@@ -487,16 +488,22 @@ class _BluetoothAppState extends State<BluetoothApp> {
           });
           connection.input.listen((data1) {
             output = ascii.decode(data1).toString();
-            data += output;
+
             if (output == ",") {
+              print('In ,');
               output = '';
               if (data != previousData) {
                 setState(() {
                   previousData = data;
+                  print('Previous Data' + previousData);
                   data = "";
                 });
+              } else {
+                data = "";
               }
             }
+            data += output;
+            print(data);
             // print(ascii.decode(data).toString());
           });
           // connection.input.listen(null).onDone(() {
