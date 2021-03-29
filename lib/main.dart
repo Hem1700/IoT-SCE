@@ -2,10 +2,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
-
-// For using PlatformException
 import 'package:flutter/services.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 
@@ -15,6 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -60,6 +58,7 @@ class _BluetoothAppState extends State<BluetoothApp> {
   BluetoothDevice _device;
   bool _connected = false;
   bool _isButtonUnavailable = false;
+  Uint8List data;
 
   @override
   void initState() {
@@ -150,10 +149,11 @@ class _BluetoothAppState extends State<BluetoothApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
-          title: Text("Flutter Bluetooth"),
+          title: Text("IoT"),
           backgroundColor: Colors.deepPurple,
           actions: <Widget>[
             FlatButton.icon(
@@ -277,21 +277,6 @@ class _BluetoothAppState extends State<BluetoothApp> {
                           ],
                         ),
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          connection.input.listen((Uint8List data) {
-                            print(utf8.decode(data));
-                          });
-                        },
-                        child: Container(
-                          height: 100,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: Colors.blue
-                          ),
-                          // child: Text(utf8.decode(data)),
-                        ),
-                      ),
                       Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Card(
@@ -324,13 +309,13 @@ class _BluetoothAppState extends State<BluetoothApp> {
                                     ),
                                   ),
                                 ),
-                                FlatButton(
+                                TextButton(
                                   onPressed: _connected
                                       ? _sendOnMessageToBluetooth
                                       : null,
                                   child: Text("ON"),
                                 ),
-                                FlatButton(
+                                TextButton(
                                   onPressed: _connected
                                       ? _sendOffMessageToBluetooth
                                       : null,
@@ -341,11 +326,77 @@ class _BluetoothAppState extends State<BluetoothApp> {
                           ),
                         ),
                       ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: SizedBox(
+                              height: 80,
+                              width: 200,
+                              child: RaisedButton(
+                                color: Colors.blue,
+                                elevation: 10,
+                                onPressed: () {
+                                  print("Hello");
+                                  connection.input.listen((data) {
+                                    print(utf8.decode(data));
+                                  });
+                                },
+                                child: Text('Get Device Temperature'),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Card(
+                              child: Container(
+                                height: 80,
+                                width: 150,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Center(
+                                  child: Text('Temperature'),
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
                     ],
                   ),
-                  Container(
-                    color: Colors.blue,
+                ],
+              ),
+              SizedBox(
+                height: 50,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Card(
+                      child: Container(
+                        height: 80,
+                        width: 150,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Center(
+                          child: Text('Proximity'),
+                        ),
+                      ),
+                    ),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(
+                      Icons.music_note_outlined,
+                      size: 40,
+                    ),
+                  )
                 ],
               ),
               Expanded(
@@ -375,7 +426,7 @@ class _BluetoothAppState extends State<BluetoothApp> {
                     ),
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),
