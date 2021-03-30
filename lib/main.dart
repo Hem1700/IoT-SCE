@@ -1,11 +1,13 @@
 // For performing some operations asynchronously
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
+//Audioplayers files
+import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 void main() => runApp(MyApp());
 
@@ -41,6 +43,7 @@ class _BluetoothAppState extends State<BluetoothApp> {
   int _deviceState;
 
   bool isDisconnecting = false;
+  AudioPlayer advancedPlayer;
 
   Map<String, Color> colors = {
     'onBorderColor': Colors.green,
@@ -63,6 +66,13 @@ class _BluetoothAppState extends State<BluetoothApp> {
   String previousData = '';
   String data = '';
   String output = '';
+  String position = '';
+
+//Function to load the music
+  Future loadMusic() async {
+    advancedPlayer = await AudioCache()
+        .play("Buzzer.ogg", volume: 50, mode: PlayerMode.MEDIA_PLAYER);
+  }
 
   @override
   void initState() {
@@ -94,6 +104,7 @@ class _BluetoothAppState extends State<BluetoothApp> {
         getPairedDevices();
       });
     });
+    loadMusic();
   }
 
   @override
@@ -104,6 +115,8 @@ class _BluetoothAppState extends State<BluetoothApp> {
       connection.dispose();
       connection = null;
     }
+    //disposing the advanceplayer once played
+    advancedPlayer = null;
 
     super.dispose();
   }
@@ -148,14 +161,6 @@ class _BluetoothAppState extends State<BluetoothApp> {
       _devicesList = devices;
     });
   }
-
-  // getData() {
-  //   List data1 = (ascii.decode(List.from(data))[0]);
-
-  //   return connection.input.listen((data) {
-  //     print(utf8.decode(data));
-  //   });
-  // }
 
   // Now, its time to build the UI
   @override
@@ -374,7 +379,13 @@ class _BluetoothAppState extends State<BluetoothApp> {
                                     child: previousData == ""
                                         ? Text(
                                             "Connect Device to get the temperature")
-                                        : Text(previousData),
+                                        : Text(
+                                            previousData,
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w300,
+                                            ),
+                                          ),
                                   ),
                                 ),
                               ),
@@ -408,11 +419,14 @@ class _BluetoothAppState extends State<BluetoothApp> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(
-                      Icons.music_note_outlined,
-                      size: 40,
+                  GestureDetector(
+                    onTap: loadMusic, //Function loadMusic
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Icon(
+                        Icons.music_note_outlined,
+                        size: 40,
+                      ),
                     ),
                   )
                 ],
