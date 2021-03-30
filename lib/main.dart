@@ -165,8 +165,14 @@ class _BluetoothAppState extends State<BluetoothApp> {
       home: Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
-          title: Text("IoT"),
-          backgroundColor: Colors.deepPurple,
+          title: Text(
+            "Car connect",
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+          backgroundColor: Colors.lightGreen,
           actions: <Widget>[
             FlatButton.icon(
               icon: Icon(
@@ -177,6 +183,7 @@ class _BluetoothAppState extends State<BluetoothApp> {
                 "Refresh",
                 style: TextStyle(
                   color: Colors.white,
+                  fontSize: 14,
                 ),
               ),
               shape: RoundedRectangleBorder(
@@ -196,7 +203,6 @@ class _BluetoothAppState extends State<BluetoothApp> {
         ),
         body: Container(
           child: Column(
-            mainAxisSize: MainAxisSize.max,
             children: <Widget>[
               Visibility(
                 visible: _isButtonUnavailable &&
@@ -222,6 +228,7 @@ class _BluetoothAppState extends State<BluetoothApp> {
                     ),
                     Switch(
                       value: _bluetoothState.isEnabled,
+                      activeColor: Colors.green[600],
                       onChanged: (bool value) {
                         future() async {
                           if (value) {
@@ -251,13 +258,15 @@ class _BluetoothAppState extends State<BluetoothApp> {
               Stack(
                 children: <Widget>[
                   Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.only(top: 10),
                         child: Text(
                           "PAIRED DEVICES",
-                          style: TextStyle(fontSize: 24, color: Colors.blue),
-                          textAlign: TextAlign.center,
+                          style:
+                              TextStyle(fontSize: 24, color: Colors.green[900]),
+                          textAlign: TextAlign.left,
                         ),
                       ),
                       Padding(
@@ -268,8 +277,7 @@ class _BluetoothAppState extends State<BluetoothApp> {
                             Text(
                               'Device:',
                               style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
+                                  fontWeight: FontWeight.bold, fontSize: 14),
                             ),
                             DropdownButton(
                               items: _getDeviceItems(),
@@ -277,14 +285,18 @@ class _BluetoothAppState extends State<BluetoothApp> {
                                   setState(() => _device = value),
                               value: _devicesList.isNotEmpty ? _device : null,
                             ),
-                            RaisedButton(
+                            ElevatedButton(
                               onPressed: _isButtonUnavailable
                                   ? null
                                   : _connected
                                       ? _disconnect
                                       : _connect,
-                              child:
-                                  Text(_connected ? 'Disconnect' : 'Connect'),
+                              child: Text(
+                                _connected ? 'Disconnect' : 'Connect',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                ),
+                              ),
                             ),
                           ],
                         ),
