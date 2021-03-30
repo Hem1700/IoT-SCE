@@ -104,7 +104,6 @@ class _BluetoothAppState extends State<BluetoothApp> {
         getPairedDevices();
       });
     });
-    loadMusic();
   }
 
   @override
