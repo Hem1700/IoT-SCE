@@ -521,6 +521,9 @@ class _BluetoothAppState extends State<BluetoothApp> {
                 setState(() {
                   previousData = data;
                   print('Previous Data' + previousData);
+                  // if (int.parse(previousData.substring(0, 3)) > 400) {
+                  //   loadMusic();
+                  // }
                   data = "";
                 });
               } else {
@@ -529,6 +532,7 @@ class _BluetoothAppState extends State<BluetoothApp> {
             }
             data += output;
             print(data);
+
             // print(ascii.decode(data).toString());
           });
           // connection.input.listen(null).onDone(() {
